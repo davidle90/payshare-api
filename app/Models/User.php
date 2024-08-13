@@ -2,14 +2,17 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -20,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_admin'
     ];
 
     /**
@@ -43,5 +47,20 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function groups() : BelongsToMany
+    {
+        return $this->belongsToMany(Group::class, 'group_member', 'id', 'owner_id');
+    }
+
+    public function contributions() : HasMany
+    {
+        return $this->hasMany(Contributor::class, 'member_id', 'id');
+    }
+
+    public function participations() : BelongsToMany
+    {
+        return $this->belongsToMany(Payment::class, 'payment_participants', 'id', 'member_id');
     }
 }
