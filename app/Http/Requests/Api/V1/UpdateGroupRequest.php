@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Api\V1;
 
+use Illuminate\Support\Facades\Auth;
+
 class UpdateGroupRequest extends BaseGroupRequest
 {
     /**
@@ -9,7 +11,7 @@ class UpdateGroupRequest extends BaseGroupRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -19,8 +21,11 @@ class UpdateGroupRequest extends BaseGroupRequest
      */
     public function rules(): array
     {
-        return [
-            //
+        $rules = [
+            'data.attributes.name' => 'sometimes|string',
+            'data.relationships.owner.data.id' => 'prohibited',
         ];
+
+        return $rules;
     }
 }

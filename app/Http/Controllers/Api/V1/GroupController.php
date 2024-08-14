@@ -7,7 +7,6 @@ use App\Models\Group;
 use App\Http\Requests\Api\V1\StoreGroupRequest;
 use App\Http\Requests\Api\V1\UpdateGroupRequest;
 use App\Http\Resources\V1\GroupResource;
-use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Gate;
 
@@ -77,6 +76,12 @@ class GroupController extends ApiController
      */
     public function destroy(Group $group)
     {
-        //
+        if(Gate::authorize('delete-group', $group)) {
+            $group->delete();
+
+            return $this->ok('Group successfully deleted.');
+        }
+
+        return $this->notAuthorized('You are not authorized to delete this resource.');
     }
 }

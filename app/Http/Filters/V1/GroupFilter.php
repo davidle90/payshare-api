@@ -12,4 +12,8 @@ class GroupFilter extends QueryFilter {
     {
 
     }
+
+    public function include($value) {
+        return $this->builder->with($value);
+    }
 }
