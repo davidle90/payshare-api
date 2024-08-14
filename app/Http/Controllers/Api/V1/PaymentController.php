@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
 use App\Models\Payment;
 use App\Http\Requests\Api\V1\StorePaymentRequest;
 use App\Http\Requests\Api\V1\UpdatePaymentRequest;
 
-class PaymentController extends Controller
+class PaymentController extends ApiController
 {
     /**
      * Display a listing of the resource.
