@@ -16,11 +16,18 @@ class BasePaymentRequest extends FormRequest
         $attributesToUpdate = [];
 
         foreach($attributeMap as $key => $attribute){
-
             if($this->has($key)) {
                 $value = $this->input($key);
                 $attributesToUpdate[$attribute] = $value;
             }
+        }
+
+        if($this->has('data.relationships.contributors')) {
+            $attributesToUpdate['contributors'] = $this->input('data.relationships.contributors');
+        }
+
+        if($this->has('data.relationships.participants')) {
+            $attributesToUpdate['participants'] = $this->input('data.relationships.participants');
         }
 
         return $attributesToUpdate;

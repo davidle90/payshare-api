@@ -22,7 +22,12 @@ class UpdatePaymentRequest extends BasePaymentRequest
     public function rules(): array
     {
         return [
-            //
+            'data.attributes.label' => 'sometimes|string',
+            'data.relationships.contributors' => 'sometimes|array',
+            'data.relationships.contributors.*.id' => 'required|integer',
+            'data.relationships.contributors.*.amount' => 'required|numeric',
+            'data.relationships.participants' => 'sometimes|array',
+            'data.relationships.participants.*.id' => 'required|integer',
         ];
     }
 }

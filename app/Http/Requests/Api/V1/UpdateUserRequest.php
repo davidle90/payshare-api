@@ -19,11 +19,9 @@ class UpdateUserRequest extends BaseUserRequest
      */
     public function rules(): array
     {
-        $rules = [
+        return [
             'data.attributes.name' => 'sometimes|string',
             'data.attributes.password' => 'sometimes|string',
         ];
-
-        return $rules;
     }
 }
