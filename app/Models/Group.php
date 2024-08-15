@@ -36,7 +36,7 @@ class Group extends Model
 
     public function members() : BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'group_member', 'id', 'member_id');
+        return $this->belongsToMany(User::class, 'group_member', 'group_id', 'member_id');
     }
 
     public function payments() : HasMany

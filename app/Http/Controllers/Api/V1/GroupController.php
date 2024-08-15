@@ -7,7 +7,10 @@ use App\Models\Group;
 use App\Http\Requests\Api\V1\StoreGroupRequest;
 use App\Http\Requests\Api\V1\UpdateGroupRequest;
 use App\Http\Resources\V1\GroupResource;
+use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class GroupController extends ApiController
@@ -15,13 +18,15 @@ class GroupController extends ApiController
     /**
      * Display a listing of the resource.
      */
-    public function index(GroupFilter $filters)
+    public function index(GroupFilter $filters, Request $request)
     {
-        if(Gate::authorize('show-group')){
-            return GroupResource::collection(Group::filter($filters)->paginate());
-        }
+        $user_id = $request->user()->id;
 
-        return $this->notAuthorized('You are not authorized to show this resource.');
+        $groups = Group::whereHas('members', function ($query) use ($user_id) {
+            $query->where('member_id', $user_id);
+        })->filter($filters)->paginate();
+
+        return GroupResource::collection($groups);
     }
 
     /**
@@ -30,7 +35,14 @@ class GroupController extends ApiController
     public function store(StoreGroupRequest $request)
     {
         if(Gate::authorize('store-group')){
-            return new GroupResource(Group::create($request->mappedAttributes()));
+
+            $group = DB::transaction(function() use ($request) {
+                $group = Group::create($request->mappedAttributes());
+                $group->members()->attach($group->owner_id);
+                return $group;
+            });
+
+            return new GroupResource($group);
         }
 
         return $this->notAuthorized('You are not authorized to create this resource.');
@@ -39,22 +51,26 @@ class GroupController extends ApiController
     /**
      * Display the specified resource.
      */
-    public function show($group_id)
+    public function show(Request $request, $group_id)
     {
-        try {
-            $group = Group::findOrFail($group_id);
+        $user_id = $request->user()->id;
+        $is_admin = $request->user()->is_admin;
+        $group = Group::findOrFail($group_id);
+        $member_ids = $group->members()->pluck('member_id')->toarray();
 
-            if($this->include('users')) {
-                return new GroupResource($group->load('users'));
-            }
-
-            return new GroupResource($group);
-
-        } catch (ModelNotFoundException $exception) {
-            return $this->error('Group not found', 404);
+        if(!in_array($user_id, $member_ids) && !$is_admin){
+            return $this->notAuthorized('You are not authorized show this resource.');
         }
-    }
 
+        if($this->include('members')) {
+            $group->load('members');
+        }
+        if($this->include('payments')) {
+            $group->load('payments');
+        }
+
+        return new GroupResource($group);
+    }
 
     /**
      * Update the specified resource in storage.
@@ -77,6 +93,14 @@ class GroupController extends ApiController
     public function destroy(Group $group)
     {
         if(Gate::authorize('delete-group', $group)) {
+
+            foreach($group->payments as $payment){
+                $payment->contributors()->delete();
+                $payment->participants()->detach();
+                $payment->delete();
+            }
+
+            $group->members()->detach();
             $group->delete();
 
             return $this->ok('Group successfully deleted.');

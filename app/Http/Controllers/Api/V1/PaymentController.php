@@ -21,7 +21,11 @@ class PaymentController extends ApiController
      */
     public function store(StorePaymentRequest $request)
     {
-        //
+        request()->validate([
+            'label' => 'required|string'
+        ]);
+
+        // group id?
     }
 
     /**

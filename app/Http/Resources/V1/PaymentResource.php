@@ -25,7 +25,8 @@ class PaymentResource extends JsonResource
                 'updatedAt' => $this->updated_at
             ],
             'includes' => [
-                'groups' => GroupResource::collection($this->whenLoaded('groups')),
+                'contributors' => PaymentResource::collection($this->whenLoaded('contributors')),
+                'participants' => PaymentResource::collection($this->whenLoaded('participants')),
             ],
             'links' => [
                 'self' => route('payments.show', ['payment' => $this->id])

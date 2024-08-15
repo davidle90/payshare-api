@@ -27,7 +27,7 @@ class UserResource extends JsonResource
             ],
             'includes' => [
                 'groups' => GroupResource::collection($this->whenLoaded('groups')),
-                'payments' => PaymentResource::collection($this->whenLoaded('payments'))
+                'payments' => PaymentResource::collection($this->whenLoaded('payments')),
             ],
             'links' => [
                 'self' => route('users.show', ['user' => $this->id])
