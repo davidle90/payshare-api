@@ -17,7 +17,7 @@ class GroupController extends ApiController
      */
     public function index(GroupFilter $filters)
     {
-        if(Gate::authorize('show-all')){
+        if(Gate::authorize('show-all-groups')){
             return GroupResource::collection(Group::filter($filters)->paginate());
         }
     }

@@ -12,6 +12,6 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('users', UserController::class)->except(['update']);
     Route::patch('users/{user}', [UserController::class, 'update']);
 
-    Route::apiResource('payments', PaymentController::class)->except(['update']);
-    Route::patch('payments/{payment}', [PaymentController::class, 'update']);
+    Route::apiResource('groups.payments', PaymentController::class)->except(['update']);
+    Route::patch('groups/{group}/payments/{payment}', [PaymentController::class, 'update']);
 });

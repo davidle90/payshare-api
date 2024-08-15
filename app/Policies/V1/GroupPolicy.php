@@ -17,7 +17,7 @@ class GroupPolicy
     }
 
     public function showAll(User $user) {
-        if($user->tokenCan(Abilities::ShowAll)){
+        if($user->tokenCan(Abilities::ShowAllGroups)){
             return true;
         }
 
