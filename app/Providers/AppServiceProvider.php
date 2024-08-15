@@ -22,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Gate::define('show-all', [GroupPolicy::class, 'showAll']);
         Gate::define('show-group', [GroupPolicy::class, 'show']);
         Gate::define('store-group', [GroupPolicy::class, 'store']);
         Gate::define('update-group', [GroupPolicy::class, 'update']);

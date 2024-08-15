@@ -7,9 +7,6 @@ use App\Models\Group;
 use App\Http\Requests\Api\V1\StoreGroupRequest;
 use App\Http\Requests\Api\V1\UpdateGroupRequest;
 use App\Http\Resources\V1\GroupResource;
-use App\Models\User;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
@@ -18,15 +15,11 @@ class GroupController extends ApiController
     /**
      * Display a listing of the resource.
      */
-    public function index(GroupFilter $filters, Request $request)
+    public function index(GroupFilter $filters)
     {
-        $user_id = $request->user()->id;
-
-        $groups = Group::whereHas('members', function ($query) use ($user_id) {
-            $query->where('member_id', $user_id);
-        })->filter($filters)->paginate();
-
-        return GroupResource::collection($groups);
+        if(Gate::authorize('show-all')){
+            return GroupResource::collection(Group::filter($filters)->paginate());
+        }
     }
 
     /**
@@ -44,32 +37,25 @@ class GroupController extends ApiController
 
             return new GroupResource($group);
         }
-
-        return $this->notAuthorized('You are not authorized to create this resource.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, $group_id)
+    public function show(Group $group)
     {
-        $user_id = $request->user()->id;
-        $is_admin = $request->user()->is_admin;
-        $group = Group::findOrFail($group_id);
-        $member_ids = $group->members()->pluck('member_id')->toarray();
+        if(Gate::authorize('show-group', $group)) {
 
-        if(!in_array($user_id, $member_ids) && !$is_admin){
-            return $this->notAuthorized('You are not authorized show this resource.');
-        }
+            if($this->include('members')) {
+                $group->load('members');
+            }
 
-        if($this->include('members')) {
-            $group->load('members');
-        }
-        if($this->include('payments')) {
-            $group->load('payments');
-        }
+            if($this->include('payments')) {
+                $group->load('payments');
+            }
 
-        return new GroupResource($group);
+            return new GroupResource($group);
+        }
     }
 
     /**
@@ -83,8 +69,6 @@ class GroupController extends ApiController
 
             return new GroupResource($group);
         }
-
-        return $this->notAuthorized('You are not authorized to update this resource.');
     }
 
     /**
@@ -105,7 +89,5 @@ class GroupController extends ApiController
 
             return $this->ok('Group successfully deleted.');
         }
-
-        return $this->notAuthorized('You are not authorized to delete this resource.');
     }
 }

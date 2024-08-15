@@ -6,6 +6,7 @@ use App\Models\User;
 
 final class Abilities {
 
+    public const ShowAll = 'group:all:show';
     public const ShowGroup = 'group:show';
     public const CreateGroup = 'group:create';
     public const UpdateGroup = 'group:update';
@@ -25,6 +26,7 @@ final class Abilities {
 
         if($user->is_admin) {
             return [
+                self::ShowAll,
                 self::ShowGroup,
                 self::CreateGroup,
                 self::UpdateGroup,

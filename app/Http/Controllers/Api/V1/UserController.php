@@ -28,8 +28,6 @@ class UserController extends ApiController
         if(Gate::authorize('store-user')){
             return new UserResource(User::create($request->mappedAttributes()));
         }
-
-        return $this->notAuthorized('You are not authorized to create this resource.');
     }
 
     /**
@@ -37,6 +35,10 @@ class UserController extends ApiController
      */
     public function show(User $user)
     {
+        if($this->include('groups')) {
+            $user->load('groups');
+        }
+
         return new UserResource($user);
     }
 
@@ -51,8 +53,6 @@ class UserController extends ApiController
 
             return new UserResource($user);
         }
-
-        return $this->notAuthorized('You are not authorized to update this resource.');
     }
 
     /**
@@ -66,7 +66,5 @@ class UserController extends ApiController
 
             return $this->ok('User successfully deleted.');
         }
-
-        return $this->notAuthorized('You are not authorized to delete this resource.');
     }
 }

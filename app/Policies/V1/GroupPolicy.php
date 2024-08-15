@@ -16,8 +16,25 @@ class GroupPolicy
         //
     }
 
-    public function show(User $user) {
-        return $user->tokenCan(Abilities::ShowGroup) || $user->tokenCan(Abilities::ShowOwnGroup);
+    public function showAll(User $user) {
+        if($user->tokenCan(Abilities::ShowAll)){
+            return true;
+        }
+
+        return false;
+    }
+
+    public function show(User $user, Group $group) {
+
+        if($user->tokenCan(Abilities::ShowGroup)) {
+            return true;
+        } else if($user->tokenCan(Abilities::ShowOwnGroup)) {
+            $member_ids = $group->members()->pluck('member_id')->toArray();
+
+            return in_array($user->id, $member_ids);
+        }
+
+        return false;
     }
 
     public function delete(User $user, Group $group) {
