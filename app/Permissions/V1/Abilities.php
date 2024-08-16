@@ -35,6 +35,8 @@ final class Abilities {
     public const UpdateOwnPayment = 'payments:own:update';
     public const DeleteOwnPayment = 'payments:own:delete';
 
+    public const MemberGroup = 'group:member';
+
     public static function getAbilities(User $user) {
 
         if($user->is_admin) {
@@ -51,7 +53,8 @@ final class Abilities {
                 self::ShowPayment,
                 self::CreatePayment,
                 self::UpdatePayment,
-                self::DeletePayment
+                self::DeletePayment,
+                self::MemberGroup
             ];
         } else {
             return [
@@ -62,7 +65,8 @@ final class Abilities {
                 self::ShowOwnPayment,
                 self::CreateOwnPayment,
                 self::UpdateOwnPayment,
-                self::DeleteOwnPayment
+                self::DeleteOwnPayment,
+                self::MemberGroup
             ];
         }
     }

@@ -5,6 +5,7 @@ namespace App\Policies\V1;
 use App\Models\Group;
 use App\Models\User;
 use App\Permissions\V1\Abilities;
+use Illuminate\Support\Facades\Auth;
 
 class GroupPolicy
 {
@@ -56,6 +57,20 @@ class GroupPolicy
             return true;
         } else if($user->tokenCan(Abilities::UpdateOwnGroup)) {
             return $user->id === $group->owner_id;
+        }
+
+        return false;
+    }
+
+    public function is_member($group_id) {
+        $user = Auth::user();
+
+        if($user->is_admin){
+            return true;
+        } else if($user->tokenCan(Abilities::MemberGroup)){
+            $group = Group::find($group_id);
+            $member_ids = $group->members()->pluck('member_id')->toArray();
+            return in_array($user->id, $member_ids);
         }
 
         return false;

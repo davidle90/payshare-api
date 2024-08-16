@@ -46,6 +46,19 @@ class PaymentController extends ApiController
     public function show(Group $group, Payment $payment)
     {
         if(Gate::authorize('show-payment', $group)){
+
+            if($this->include('group')) {
+                $payment->load('group');
+            }
+
+            if($this->include('participants')) {
+                $payment->load('participants');
+            }
+
+            if($this->include('contributors')) {
+                $payment->load('contributors');
+            }
+
             return new PaymentResource($payment);
         }
     }

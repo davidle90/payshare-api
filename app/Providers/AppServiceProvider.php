@@ -28,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('store-group', [GroupPolicy::class, 'store']);
         Gate::define('update-group', [GroupPolicy::class, 'update']);
         Gate::define('delete-group', [GroupPolicy::class, 'delete']);
+        Gate::define('member-group', [GroupPolicy::class, 'is_member']);
 
         Gate::define('store-user', [UserPolicy::class, 'store']);
         Gate::define('update-user', [UserPolicy::class, 'update']);

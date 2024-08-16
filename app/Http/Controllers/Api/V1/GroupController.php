@@ -7,6 +7,8 @@ use App\Models\Group;
 use App\Http\Requests\Api\V1\StoreGroupRequest;
 use App\Http\Requests\Api\V1\UpdateGroupRequest;
 use App\Http\Resources\V1\GroupResource;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
@@ -88,6 +90,36 @@ class GroupController extends ApiController
             $group->delete();
 
             return $this->ok('Group successfully deleted.');
+        }
+    }
+
+    // public function set_members(Request $request, Group $group)
+    // {
+    //     if(Gate::authorize('member-group', $group->id)){
+    //         $member_ids = $request->input('data.attributes.member_ids');
+    //         $group->members()->sync($member_ids);
+
+    //         return $this->ok('Members updated');
+    //     }
+    // }
+
+    public function add_members(Request $request, Group $group)
+    {
+        if(Gate::authorize('member-group', $group->id)){
+            $member_ids = $request->input('data.attributes.member_ids');
+            $group->members()->syncWithoutDetaching($member_ids);
+
+            return $this->ok('Members added');
+        }
+    }
+
+    public function remove_members(Request $request, Group $group)
+    {
+        if(Gate::authorize('member-group', $group->id)){
+            $member_ids = $request->input('data.attributes.member_ids');
+            $group->members()->detach($member_ids);
+
+            return $this->ok('Members removed');
         }
     }
 }

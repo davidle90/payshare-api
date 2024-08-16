@@ -27,7 +27,7 @@ class PaymentPolicy
         if($user->tokenCan(Abilities::ShowPayment)){
             return true;
         } else if ($user->tokenCan(Abilities::ShowOwnPayment)){
-            return $group->users()->where('member_id', $user->id)->exists();
+            return $group->members()->where('member_id', $user->id)->exists();
         }
 
         return false;
@@ -38,7 +38,7 @@ class PaymentPolicy
         if($user->tokenCan(Abilities::CreatePayment)) {
             return true;
         } else if($user->tokenCan(Abilities::CreateOwnPayment)) {
-            return $group->users()->where('member_id', $user->id)->exists();
+            return $group->members()->where('member_id', $user->id)->exists();
         }
 
         return false;
@@ -49,7 +49,7 @@ class PaymentPolicy
         if($user->tokenCan(Abilities::UpdatePayment)) {
             return true;
         } else if($user->tokenCan(Abilities::UpdateOwnPayment)) {
-            return $group->users()->where('member_id', $user->id)->exists();
+            return $group->members()->where('member_id', $user->id)->exists();
         }
 
         return false;
@@ -60,7 +60,7 @@ class PaymentPolicy
         if($user->tokenCan(Abilities::DeletePayment)) {
             return true;
         } else if($user->tokenCan(Abilities::DeleteOwnPayment)) {
-            return $group->users()->where('member_id', $user->id)->exists();
+            return $group->members()->where('member_id', $user->id)->exists();
         }
 
         return false;
