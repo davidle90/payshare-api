@@ -62,13 +62,11 @@ class GroupPolicy
         return false;
     }
 
-    public function is_member($group_id) {
-        $user = Auth::user();
+    public function is_member(User $user, Group $group) {
 
         if($user->is_admin){
             return true;
         } else if($user->tokenCan(Abilities::MemberGroup)){
-            $group = Group::find($group_id);
             $member_ids = $group->members()->pluck('member_id')->toArray();
             return in_array($user->id, $member_ids);
         }
