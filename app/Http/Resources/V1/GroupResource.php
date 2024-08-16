@@ -18,14 +18,14 @@ class GroupResource extends JsonResource
             'type' => 'group',
             'id' => $this->id,
             'attributes' => [
-                'owner_id' => $this->group_id,
+                'owner_id' => $this->owner_id,
                 'name' => $this->name,
                 'createdAt' => $this->created_at,
                 'updatedAt' => $this->updated_at
             ],
             'includes' => [
                 'payments' => PaymentResource::collection($this->whenLoaded('payments')),
-                'members' => UserResource::collection($this->whenLoaded('members'))
+                'members' => UserResource::collection($this->whenLoaded('members')),
             ],
             'links' => [
                 'self' => route('groups.show', ['group' => $this->id])

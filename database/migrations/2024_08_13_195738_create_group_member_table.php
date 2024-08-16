@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('group_member', function (Blueprint $table) {
             $table->id();
             $table->foreignId('group_id')->constrained('groups');
-            $table->foreignId('member_id')->constrained('members');
+            $table->foreignId('member_id')->constrained('users');
             $table->timestamps();
         });
     }

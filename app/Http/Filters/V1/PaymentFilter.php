@@ -2,7 +2,7 @@
 
 namespace App\Http\Filters\V1;
 
-class GroupFilter extends QueryFilter {
+class PaymentFilter extends QueryFilter {
 
     protected $sortable = [
 

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Http\Filters\V1\QueryFilter;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,6 +24,11 @@ class Group extends Model
         'updated_at'
     ];
 
+    public function scopeFilter(Builder $builder, QueryFilter $filters)
+    {
+        return $filters->apply($builder);
+    }
+
     public function owner() : BelongsTo
     {
         return $this->belongsTo(User::class, 'owner_id', 'id');
@@ -29,7 +36,7 @@ class Group extends Model
 
     public function members() : BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'group_member', 'id', 'member_id');
+        return $this->belongsToMany(User::class, 'group_member', 'group_id', 'member_id');
     }
 
     public function payments() : HasMany

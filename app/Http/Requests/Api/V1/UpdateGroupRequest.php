@@ -2,16 +2,16 @@
 
 namespace App\Http\Requests\Api\V1;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
-class UpdateGroupRequest extends FormRequest
+class UpdateGroupRequest extends BaseGroupRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,8 +21,11 @@ class UpdateGroupRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
+        $rules = [
+            'data.attributes.name' => 'sometimes|string',
+            'data.relationships.owner.data.id' => 'prohibited',
         ];
+
+        return $rules;
     }
 }

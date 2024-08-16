@@ -2,16 +2,14 @@
 
 namespace App\Http\Requests\Api\V1;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class StorePaymentRequest extends FormRequest
+class StorePaymentRequest extends BasePaymentRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +20,9 @@ class StorePaymentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'data' => 'required|array',
+            'data.attributes' => 'required|array',
+            'data.attributes.label' => 'required|string',
         ];
     }
 }

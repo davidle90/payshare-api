@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('group_id')->constrained()->onDelete('cascade');
+            $table->foreignId('created_by')->constrained('users');
             $table->string('label');
-            $table->decimal('total', 8, 2);
+            $table->decimal('total', 8, 2)->default(0);
             $table->timestamps();
         });
     }

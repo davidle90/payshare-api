@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V1;
 
+use App\Models\Group;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -25,10 +26,12 @@ class PaymentResource extends JsonResource
                 'updatedAt' => $this->updated_at
             ],
             'includes' => [
-                'groups' => GroupResource::collection($this->whenLoaded('groups')),
+                'group' => new GroupResource($this->whenLoaded('group')),
+                'contributors' => PaymentResource::collection($this->whenLoaded('contributors')),
+                'participants' => PaymentResource::collection($this->whenLoaded('participants')),
             ],
             'links' => [
-                'self' => route('payments.show', ['payment' => $this->id])
+                'self' => route('groups.payments.show', ['group' => $this->group_id, 'payment' => $this->id])
             ]
         ];
     }

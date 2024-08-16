@@ -18,6 +18,11 @@ class DatabaseSeeder extends Seeder
         User::factory(10)->create();
         Group::factory(3)->create();
 
+        $groups = Group::all();
+        foreach($groups as $group){
+            $group->members()->attach($group->owner_id);
+        }
+
         User::factory()->create([
             'name' => 'Admin',
             'email' => 'admin@admin.com',
