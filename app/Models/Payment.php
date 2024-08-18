@@ -38,11 +38,11 @@ class Payment extends Model
 
     public function contributors() : HasMany
     {
-        return $this->hasMany(Contributor::class, 'member_id', 'id');
+        return $this->hasMany(Contributor::class, 'payment_id', 'id');
     }
 
     public function participants() : BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'payment_participant', 'id', 'payment_id');
+        return $this->belongsToMany(User::class, 'payment_participant', 'payment_id', 'member_id');
     }
 }

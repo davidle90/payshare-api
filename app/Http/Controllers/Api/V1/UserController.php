@@ -38,6 +38,12 @@ class UserController extends ApiController
         if($this->include('groups')) {
             $user->load('groups');
         }
+        if($this->include('contributions')) {
+            $user->load('contributions');
+        }
+        if($this->include('participations')) {
+            $user->load('participations');
+        }
 
         return new UserResource($user);
     }
