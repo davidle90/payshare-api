@@ -23,6 +23,11 @@ class StorePaymentRequest extends BasePaymentRequest
             'data' => 'required|array',
             'data.attributes' => 'required|array',
             'data.attributes.label' => 'required|string',
+            'data.relationships.contributors' => 'sometimes|array',
+            'data.relationships.contributors.*.id' => 'required|integer',
+            'data.relationships.contributors.*.amount' => 'required|numeric',
+            'data.relationships.participants' => 'sometimes|array',
+            'data.relationships.participants.*.id' => 'required|integer',
         ];
     }
 }

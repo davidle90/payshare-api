@@ -105,7 +105,7 @@ class GroupController extends ApiController
 
     public function add_members(Request $request, Group $group)
     {
-        if(Gate::authorize('member-group', $group->id)){
+        if(Gate::authorize('member-group', $group)){
             $member_ids = $request->input('data.attributes.member_ids');
             $group->members()->syncWithoutDetaching($member_ids);
 
@@ -115,7 +115,7 @@ class GroupController extends ApiController
 
     public function remove_members(Request $request, Group $group)
     {
-        if(Gate::authorize('member-group', $group->id)){
+        if(Gate::authorize('member-group', $group)){
             $member_ids = $request->input('data.attributes.member_ids');
             $group->members()->detach($member_ids);
 

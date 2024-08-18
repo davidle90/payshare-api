@@ -7,6 +7,7 @@ use App\Models\Payment;
 use App\Http\Requests\Api\V1\StorePaymentRequest;
 use App\Http\Requests\Api\V1\UpdatePaymentRequest;
 use App\Http\Resources\V1\PaymentResource;
+use App\Models\Contributor;
 use App\Models\Group;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -32,9 +33,35 @@ class PaymentController extends ApiController
             $attributes = $request->mappedAttributes();
             $attributes['group_id'] = $group->id;
             $attributes['created_by'] = Auth::user()->id;
+            $participant_ids = [];
 
             $payment = Payment::create($attributes);
             $payment->save();
+
+            $group_member_ids = $group->members()->pluck('member_id')->toarray();
+
+            foreach($attributes['participants'] as $participant){
+                if(!in_array($participant['id'], $group_member_ids)){
+                    return $this->error('User not member of this group: '.$participant['id'], 400);
+                }
+                $participant_ids[] = $participant['id'];
+            }
+
+            foreach($attributes['contributors'] as $contributor) {
+                $new_contributor = Contributor::firstOrNew(['member_id' => $contributor['id'], 'payment_id' => $payment->id]);
+                $new_contributor->amount = $contributor['amount'];
+                $new_contributor->save();
+            }
+
+            $total = 0;
+            foreach($payment->contributors as $payment_contributor){
+                $total += $payment_contributor->amount;
+            }
+
+            $payment->total = $total;
+            $payment->save();
+
+            $payment->participants()->sync($participant_ids);
 
             return new PaymentResource($payment);
         }
@@ -70,7 +97,52 @@ class PaymentController extends ApiController
     {
         if(Gate::authorize('update-payment', $group)) {
 
-            $payment->update($request->mappedAttributes());
+            $attributes = $request->mappedAttributes();
+            $participant_ids = [];
+            $contributor_ids = [];
+            $total = 0;
+
+            $payment->update($attributes);
+
+            $group_member_ids = $group->members()->pluck('member_id')->toarray();
+
+            foreach($attributes['contributors'] as $contributor){
+                $contributor_ids[] = $contributor['id'];
+
+                if(!in_array($contributor['id'], $group_member_ids)){
+                    return $this->error('User not member of this group: '.$contributor['id'], 400);
+                }
+            }
+
+            foreach($attributes['participants'] as $participant){
+
+                if(!in_array($participant['id'], $group_member_ids)){
+                    return $this->error('User not member of this group: '.$participant['id'], 400);
+                }
+
+                $participant_ids[] = $participant['id'];
+            }
+
+            $payment->participants()->sync($participant_ids);
+
+            foreach($payment->contributors as $payment_contributor){
+                if(!in_array($payment_contributor->id, $contributor_ids)){
+                    $payment_contributor->delete();
+                }
+            }
+
+            foreach($attributes['contributors'] as $contributor) {
+                $new_contributor = Contributor::firstOrNew(['member_id' => $contributor['id'], 'payment_id' => $payment->id]);
+                $new_contributor->amount = $contributor['amount'];
+                $new_contributor->save();
+            }
+
+            foreach($payment->contributors as $current_contributor){
+                $total += $current_contributor->amount;
+            }
+
+            $payment->total = $total;
+            $payment->save();
 
             return new PaymentResource($payment);
         }
