@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Helpers\helpers;
 use App\Http\Filters\V1\PaymentFilter;
 use App\Models\Payment;
 use App\Http\Requests\Api\V1\StorePaymentRequest;
@@ -11,6 +12,7 @@ use App\Models\Contributor;
 use App\Models\Group;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use App\Helpers\helper;
 
 class PaymentController extends ApiController
 {
@@ -62,6 +64,8 @@ class PaymentController extends ApiController
             $payment->save();
 
             $payment->participants()->sync($participant_ids);
+
+            helpers::update_total_expenses($group);
 
             return new PaymentResource($payment);
         }
@@ -143,6 +147,8 @@ class PaymentController extends ApiController
 
             $payment->total = $total;
             $payment->save();
+
+            helpers::update_total_expenses($group);
 
             return new PaymentResource($payment);
         }

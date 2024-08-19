@@ -17,6 +17,8 @@ class Group extends Model
     protected $fillable = [
         'owner_id',
         'name',
+        'total_expenses',
+        'is_resolved'
     ];
 
     protected $dates = [
