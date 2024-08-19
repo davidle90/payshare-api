@@ -36,6 +36,7 @@ final class Abilities {
     public const DeleteOwnPayment = 'payments:own:delete';
 
     public const MemberGroup = 'group:member';
+    public const PaymentGroup = 'payment:group';
 
     public static function getAbilities(User $user) {
 
@@ -54,7 +55,8 @@ final class Abilities {
                 self::CreatePayment,
                 self::UpdatePayment,
                 self::DeletePayment,
-                self::MemberGroup
+                self::MemberGroup,
+                self::PaymentGroup
             ];
         } else {
             return [
@@ -66,7 +68,8 @@ final class Abilities {
                 self::CreateOwnPayment,
                 self::UpdateOwnPayment,
                 self::DeleteOwnPayment,
-                self::MemberGroup
+                self::MemberGroup,
+                self::PaymentGroup
             ];
         }
     }

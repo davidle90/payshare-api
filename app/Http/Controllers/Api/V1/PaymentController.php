@@ -95,7 +95,7 @@ class PaymentController extends ApiController
      */
     public function update(UpdatePaymentRequest $request, Group $group, Payment $payment)
     {
-        if(Gate::authorize('update-payment', $group)) {
+        if(Gate::authorize('payment-group', [$group, $payment])) {
 
             $attributes = $request->mappedAttributes();
             $participant_ids = [];

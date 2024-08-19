@@ -93,16 +93,6 @@ class GroupController extends ApiController
         }
     }
 
-    // public function set_members(Request $request, Group $group)
-    // {
-    //     if(Gate::authorize('member-group', $group->id)){
-    //         $member_ids = $request->input('data.attributes.member_ids');
-    //         $group->members()->sync($member_ids);
-
-    //         return $this->ok('Members updated');
-    //     }
-    // }
-
     public function add_members(Request $request, Group $group)
     {
         if(Gate::authorize('member-group', $group)){
@@ -120,6 +110,34 @@ class GroupController extends ApiController
             $group->members()->detach($member_ids);
 
             return $this->ok('Members removed');
+        }
+    }
+
+    public function get_total_expenses(Group $group)
+    {
+
+        if(Gate::authorize('member-group', $group)){
+            $total_expenses = 0;
+
+            foreach($group->payments as $payment){
+                $total_expenses += $payment->total;
+            }
+
+            return $total_expenses;
+        }
+    }
+
+    public function calculate_balance(Group $group)
+    {
+        if(Gate::authorize('member-group', $group)){
+
+        }
+    }
+
+    public function simplify_payment(Group $group)
+    {
+        if(Gate::authorize('member-group', $group)){
+
         }
     }
 }

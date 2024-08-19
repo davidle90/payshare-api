@@ -39,5 +39,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('store-payment', [PaymentPolicy::class, 'store']);
         Gate::define('update-payment', [PaymentPolicy::class, 'update']);
         Gate::define('delete-payment', [PaymentPolicy::class, 'delete']);
+        Gate::define('payment-group', [PaymentPolicy::class, 'is_payment_group']);
+
     }
 }
