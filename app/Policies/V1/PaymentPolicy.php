@@ -3,6 +3,7 @@
 namespace App\Policies\V1;
 
 use App\Models\Group;
+use App\Models\Payment;
 use App\Models\User;
 use App\Permissions\V1\Abilities;
 
@@ -61,6 +62,19 @@ class PaymentPolicy
             return true;
         } else if($user->tokenCan(Abilities::DeleteOwnPayment)) {
             return $group->members()->where('member_id', $user->id)->exists();
+        }
+
+        return false;
+    }
+
+    public function is_payment_group(User $user, Group $group, Payment $payment)
+    {
+        if($user->is_admin) {
+            return true;
+        } else if($user->tokenCan(Abilities::UpdateOwnPayment)) {
+            if($group->members()->where('member_id', $user->id)->exists() && ($payment->group_id == $group->id))
+
+            return true;
         }
 
         return false;
