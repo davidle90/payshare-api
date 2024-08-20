@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Helpers\helpers;
 use App\Http\Filters\V1\UserFilter;
 use App\Models\User;
 use App\Http\Requests\Api\V1\StoreUserRequest;
@@ -26,7 +27,10 @@ class UserController extends ApiController
     public function store(StoreUserRequest $request)
     {
         if(Gate::authorize('store-user')){
-            return new UserResource(User::create($request->mappedAttributes()));
+            $user = User::create($request->mappedAttributes());
+            $user->reference_id = helpers::generate_reference_id(3, $user->name, $user->id);
+            $user->save();
+            return new UserResource($user);
         }
     }
 

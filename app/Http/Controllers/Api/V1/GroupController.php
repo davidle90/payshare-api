@@ -33,6 +33,8 @@ class GroupController extends ApiController
 
             $group = DB::transaction(function() use ($request) {
                 $group = Group::create($request->mappedAttributes());
+                $group->reference_id = helpers::generate_reference_id(3, $group->name, $group->id);
+                $group->save();
                 $group->members()->attach($group->owner_id);
                 return $group;
             });

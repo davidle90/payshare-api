@@ -15,6 +15,7 @@ class Payment extends Model
     use HasFactory;
 
     protected $fillable = [
+        'reference_id',
         'group_id',
         'label',
         'total',

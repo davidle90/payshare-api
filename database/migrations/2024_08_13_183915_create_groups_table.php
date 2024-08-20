@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('groups', function (Blueprint $table) {
             $table->id();
+            $table->string('reference_id')->nullable();
             $table->foreignId('owner_id')->constrained('users');
             $table->string('name');
             $table->decimal('total_expenses', 8, 2)->default(0);

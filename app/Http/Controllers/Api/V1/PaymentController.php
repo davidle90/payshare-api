@@ -61,6 +61,7 @@ class PaymentController extends ApiController
             }
 
             $payment->total = $total;
+            $payment->reference_id = helpers::generate_reference_id(5, $payment->label, $payment->id);
             $payment->save();
 
             $payment->participants()->sync($participant_ids);

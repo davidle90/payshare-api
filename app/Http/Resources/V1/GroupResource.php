@@ -18,6 +18,7 @@ class GroupResource extends JsonResource
             'type' => 'group',
             'id' => $this->id,
             'attributes' => [
+                'reference_id' => $this->reference_id,
                 'owner_id' => $this->owner_id,
                 'name' => $this->name,
                 'totalExpenses' => $this->total_expenses,

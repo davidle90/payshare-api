@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Models\Group;
+use Illuminate\Support\Str;
 
 class helpers {
 
@@ -76,7 +77,18 @@ class helpers {
         return $balance;
     }
 
-    public function simplify_payment(Group $group)
+    public static function simplify_payment(Group $group)
     {
+        // $balance = $this->calculate_balance($group);
+    }
+
+    public static function generate_reference_id($randcount, $string, $int)
+    {
+        $randomString = Str::random($randcount);
+        $firstLetter = $string[0];
+        $lastLetter = $string[strlen($string) - 1];
+        $reference_id = $firstLetter . $lastLetter . $int . $randomString;
+
+        return $reference_id;
     }
 }
