@@ -23,10 +23,10 @@ class StoreGroupRequest extends BaseGroupRequest
     public function rules(): array
     {
 
-        $isGroupController = $this->routeIs('groups.store');
-        $ownerIdAttribute = $isGroupController ? 'data.relationships.owner.data.id' : 'owner';
-        $user = Auth::user();
-        $ownerRule = 'required|integer|exists:users,id';
+        // $isGroupController = $this->routeIs('groups.store');
+        // $ownerIdAttribute = $isGroupController ? 'data.relationships.owner.data.id' : 'owner';
+        // $user = Auth::user();
+        // $ownerRule = 'required|integer|exists:users,id';
 
         $rules = [
             'data' => 'required|array',
@@ -34,17 +34,17 @@ class StoreGroupRequest extends BaseGroupRequest
             'data.attributes.name' => 'required|string',
         ];
 
-        if($isGroupController){
-            $rules['data.relationships'] = 'required|array';
-            $rules['data.relationships.owner'] = 'required|array';
-            $rules['data.relationships.owner.data'] = 'required|array';
-        }
+        // if($isGroupController){
+        //     $rules['data.relationships'] = 'required|array';
+        //     $rules['data.relationships.owner'] = 'required|array';
+        //     $rules['data.relationships.owner.data'] = 'required|array';
+        // }
 
-        $rules[$ownerIdAttribute] = $ownerRule . '|size:' . $user->id;
+        // $rules[$ownerIdAttribute] = $ownerRule . '|size:' . $user->id;
 
-        if($user->tokenCan(Abilities::CreateGroup)) {
-            $rules[$ownerIdAttribute] = $ownerRule;
-        }
+        // if($user->tokenCan(Abilities::CreateGroup)) {
+        //     $rules[$ownerIdAttribute] = $ownerRule;
+        // }
 
         return $rules;
     }
