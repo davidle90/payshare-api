@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Helpers\helpers;
 use App\Http\Filters\V1\GroupFilter;
 use App\Models\Group;
 use App\Http\Requests\Api\V1\StoreGroupRequest;
 use App\Http\Requests\Api\V1\UpdateGroupRequest;
 use App\Http\Resources\V1\GroupResource;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
@@ -33,6 +33,8 @@ class GroupController extends ApiController
 
             $group = DB::transaction(function() use ($request) {
                 $group = Group::create($request->mappedAttributes());
+                $group->reference_id = helpers::generate_reference_id(3, $group->name, $group->id);
+                $group->save();
                 $group->members()->attach($group->owner_id);
                 return $group;
             });
@@ -113,31 +115,9 @@ class GroupController extends ApiController
         }
     }
 
-    public function get_total_expenses(Group $group)
+    public function test(Group $group)
     {
 
-        if(Gate::authorize('member-group', $group)){
-            $total_expenses = 0;
-
-            foreach($group->payments as $payment){
-                $total_expenses += $payment->total;
-            }
-
-            return $total_expenses;
-        }
-    }
-
-    public function calculate_balance(Group $group)
-    {
-        if(Gate::authorize('member-group', $group)){
-
-        }
-    }
-
-    public function simplify_payment(Group $group)
-    {
-        if(Gate::authorize('member-group', $group)){
-
-        }
+        return helpers::calculate_balance($group);
     }
 }

@@ -21,7 +21,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('/groups/{group}/add-members', [GroupController::class, 'add_members']);
     Route::post('/groups/{group}/remove-members', [GroupController::class, 'remove_members']);
 
-    Route::get('/groups/{group}/total-expenses', [GroupController::class, 'get_total_expenses']);
+    Route::get('/groups/{group}/test', [GroupController::class, 'test']);
     Route::get('/groups/{group}/calculate-balance', [GroupController::class, 'calculate_balance']);
     Route::get('/group/{group}/simplify_payments', [GroupController::class, 'simplify_payments']);
     Route::get('/group/{group}/resolve', [GroupController::class, 'resolve']);

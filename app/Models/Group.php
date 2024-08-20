@@ -15,8 +15,11 @@ class Group extends Model
     use HasFactory;
 
     protected $fillable = [
+        'reference_id',
         'owner_id',
         'name',
+        'total_expenses',
+        'is_resolved'
     ];
 
     protected $dates = [

@@ -23,6 +23,7 @@ class UpdateGroupRequest extends BaseGroupRequest
     {
         $rules = [
             'data.attributes.name' => 'sometimes|string',
+            'data.attributes.isResolved' => 'sometimes|boolean',
             'data.relationships.owner.data.id' => 'prohibited',
         ];
 
