@@ -32,7 +32,7 @@ class PaymentResource extends JsonResource
                 'participants' => ParticipantResource::collection($this->participants),
             ],
             'links' => [
-                'self' => route('groups.payments.show', ['group' => $this->group->reference_id, 'payment' => $this->reference_id])
+                //'self' => route('groups.payments.show', ['group' => $this->group->reference_id, 'payment' => $this->reference_id])
             ]
         ];
     }

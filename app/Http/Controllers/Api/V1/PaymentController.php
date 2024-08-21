@@ -83,7 +83,7 @@ class PaymentController extends ApiController
     public function show($group_reference_id, $payment_reference_id)
     {
         $group = Group::where('reference_id', $group_reference_id)->first();
-        $payment = Group::where('reference_id', $payment_reference_id)->first();
+        $payment = Payment::where('reference_id', $payment_reference_id)->first();
 
         if (!$group || !$payment) {
             $missingModel = !$group ? 'Group' : 'Payment';
@@ -114,7 +114,7 @@ class PaymentController extends ApiController
     public function update(UpdatePaymentRequest $request, $group_reference_id, $payment_reference_id)
     {
         $group = Group::where('reference_id', $group_reference_id)->first();
-        $payment = Group::where('reference_id', $payment_reference_id)->first();
+        $payment = Payment::where('reference_id', $payment_reference_id)->first();
 
         if (!$group || !$payment) {
             $missingModel = !$group ? 'Group' : 'Payment';
@@ -182,7 +182,7 @@ class PaymentController extends ApiController
     public function destroy($group_reference_id, $payment_reference_id)
     {
         $group = Group::where('reference_id', $group_reference_id)->first();
-        $payment = Group::where('reference_id', $payment_reference_id)->first();
+        $payment = Payment::where('reference_id', $payment_reference_id)->first();
 
         if (!$group || !$payment) {
             $missingModel = !$group ? 'Group' : 'Payment';

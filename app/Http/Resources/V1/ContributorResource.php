@@ -18,6 +18,8 @@ class ContributorResource extends JsonResource
             'type' => 'contributor',
             'id' => $this->id,
             'attributes' => [
+                'name' => $this->member->name,
+                'email' => $this->member->email,
                 'payment_id' => $this->payment_id,
                 'member_id' => $this->member_id,
                 'amount' => $this->amount,

@@ -18,6 +18,8 @@ class ParticipantResource extends JsonResource
             'type' => 'participant',
             'id' => $this->id,
             'attributes' => [
+                'name' => $this->name,
+                'email' => $this->email,
                 'payment_id' => $this->pivot->payment_id,
                 'member_id' => $this->pivot->member_id,
             ],
