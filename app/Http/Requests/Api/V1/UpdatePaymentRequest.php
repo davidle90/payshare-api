@@ -28,6 +28,7 @@ class UpdatePaymentRequest extends BasePaymentRequest
             'data.relationships.contributors.*.amount' => 'required|numeric',
             'data.relationships.participants' => 'sometimes|array',
             'data.relationships.participants.*.id' => 'required|integer',
+            'data.attributes.reference_id' => 'prohibited'
         ];
     }
 }

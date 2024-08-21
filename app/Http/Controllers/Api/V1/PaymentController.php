@@ -27,8 +27,13 @@ class PaymentController extends ApiController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePaymentRequest $request, Group $group)
+    public function store(StorePaymentRequest $request, $group_reference_id)
     {
+        $group = Group::where('reference_id', $group_reference_id)->first();
+
+        if(!$group){
+            return $this->error('Group not found', 404);
+        }
 
         if(Gate::authorize('store-payment', $group)){
 
@@ -75,8 +80,16 @@ class PaymentController extends ApiController
     /**
      * Display the specified resource.
      */
-    public function show(Group $group, Payment $payment)
+    public function show($group_reference_id, $payment_reference_id)
     {
+        $group = Group::where('reference_id', $group_reference_id)->first();
+        $payment = Group::where('reference_id', $payment_reference_id)->first();
+
+        if (!$group || !$payment) {
+            $missingModel = !$group ? 'Group' : 'Payment';
+            return $this->error("$missingModel not found", 404);
+        }
+
         if(Gate::authorize('show-payment', $group)){
 
             if($this->include('group')) {
@@ -98,8 +111,16 @@ class PaymentController extends ApiController
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePaymentRequest $request, Group $group, Payment $payment)
+    public function update(UpdatePaymentRequest $request, $group_reference_id, $payment_reference_id)
     {
+        $group = Group::where('reference_id', $group_reference_id)->first();
+        $payment = Group::where('reference_id', $payment_reference_id)->first();
+
+        if (!$group || !$payment) {
+            $missingModel = !$group ? 'Group' : 'Payment';
+            return $this->error("$missingModel not found", 404);
+        }
+
         if(Gate::authorize('payment-group', [$group, $payment])) {
 
             $attributes = $request->mappedAttributes();
@@ -158,8 +179,16 @@ class PaymentController extends ApiController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Group $group, Payment $payment)
+    public function destroy($group_reference_id, $payment_reference_id)
     {
+        $group = Group::where('reference_id', $group_reference_id)->first();
+        $payment = Group::where('reference_id', $payment_reference_id)->first();
+
+        if (!$group || !$payment) {
+            $missingModel = !$group ? 'Group' : 'Payment';
+            return $this->error("$missingModel not found", 404);
+        }
+
         if(Gate::authorize('delete-payment', $group)) {
 
             $payment->contributors()->delete();

@@ -63,7 +63,6 @@ class GroupPolicy
     }
 
     public function is_member(User $user, Group $group) {
-
         if($user->is_admin){
             return true;
         } else if($user->tokenCan(Abilities::MemberGroup)){

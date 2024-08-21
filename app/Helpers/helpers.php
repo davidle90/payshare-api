@@ -91,4 +91,18 @@ class helpers {
 
         return $reference_id;
     }
+
+    public static function get_model($model, $reference_id){
+        $get_model = $model::where('reference_id', $reference_id)->first();
+
+        if(!$get_model){
+            abort(404, [
+                'message' => 'Model not found',
+                'error_code' => 'MODEL_NOT_FOUND',
+                'reference_id' => $reference_id
+            ]);
+        }
+
+        return $get_model;
+    }
 }

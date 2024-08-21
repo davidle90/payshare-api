@@ -31,7 +31,7 @@ class GroupResource extends JsonResource
                 'members' => UserResource::collection($this->whenLoaded('members')),
             ],
             'links' => [
-                'self' => route('groups.show', ['group' => $this->id])
+                'self' => route('groups.show', ['group' => $this->reference_id])
             ]
         ];
     }
