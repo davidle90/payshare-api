@@ -22,6 +22,7 @@ class UpdateUserRequest extends BaseUserRequest
         return [
             'data.attributes.name' => 'sometimes|string',
             'data.attributes.password' => 'sometimes|string',
+            'data.attributes.reference_id' => 'prohibited'
         ];
     }
 }
