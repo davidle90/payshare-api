@@ -28,6 +28,7 @@ class UserResource extends JsonResource
             ],
             'includes' => [
                 'groups' => GroupResource::collection($this->whenLoaded('groups')),
+                'friends' => UserResource::collection($this->whenLoaded('friends')),
                 'contributions' => ContributorResource::collection($this->whenLoaded('contributions')),
                 'participations' => ParticipantResource::collection($this->whenLoaded('participations')),
             ],

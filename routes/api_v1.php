@@ -10,6 +10,9 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('users', UserController::class)->except(['update']);
     Route::patch('users/{user}', [UserController::class, 'update']);
 
+    Route::post('/users/{user}/add-friends', [UserController::class, 'add_friends']);
+    Route::post('/users/{user}/remove-friends', [UserController::class, 'remove_friends']);
+
     Route::apiResource('groups', GroupController::class)->except(['update']);
     Route::patch('groups/{group}', [GroupController::class, 'update']);
 
