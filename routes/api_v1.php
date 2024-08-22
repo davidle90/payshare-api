@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\FriendRequestController;
 use App\Http\Controllers\Api\V1\GroupController;
 use App\Http\Controllers\Api\V1\PaymentController;
 use App\Http\Controllers\Api\V1\UserController;
@@ -9,6 +10,14 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::apiResource('users', UserController::class)->except(['update']);
     Route::patch('users/{user}', [UserController::class, 'update']);
+
+    Route::post('/friend-request/send', [FriendRequestController::class, 'sendRequest']);
+    Route::post('/friend-request/accept/{friendRequest}', [FriendRequestController::class, 'acceptRequest']);
+    Route::post('/friend-request/decline/{friendRequest}', [FriendRequestController::class, 'declineRequest']);
+    Route::post('/friend-request/remove/{friend}', [FriendRequestController::class, 'removeFriend']);
+
+    // Route::post('/users/{user}/add-friends', [UserController::class, 'add_friends']);
+    // Route::post('/users/{user}/remove-friends', [UserController::class, 'remove_friends']);
 
     Route::apiResource('groups', GroupController::class)->except(['update']);
     Route::patch('groups/{group}', [GroupController::class, 'update']);

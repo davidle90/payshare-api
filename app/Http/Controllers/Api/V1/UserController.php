@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Http\Requests\Api\V1\StoreUserRequest;
 use App\Http\Requests\Api\V1\UpdateUserRequest;
 use App\Http\Resources\V1\UserResource;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
@@ -48,6 +49,15 @@ class UserController extends ApiController
         if($this->include('participations')) {
             $user->load('participations');
         }
+        if($this->include('friends')) {
+            $user->load('friends');
+        }
+        if($this->include('receivedFriendRequests')) {
+            $user->load('receivedFriendRequests');
+        }
+        if($this->include('sentFriendRequests')) {
+            $user->load('sentFriendRequests');
+        }
 
         return new UserResource($user);
     }
@@ -77,4 +87,38 @@ class UserController extends ApiController
             return $this->ok('User successfully deleted.');
         }
     }
+
+    // public function add_friends(Request $request, User $user)
+    // {
+    //     $friend_reference_ids = $request->get('friend_reference_ids', []);
+    //     $friends = User::whereIn('reference_id', $friend_reference_ids)->get();
+
+    //     if(isset($friends) || empty($friends)) {
+    //         return $this->error('Friend(s) not found.', 404);
+    //     }
+
+    //     $friend_names = $friends->pluck('name')->toArray();
+    //     $friend_ids = $friends->pluck('id')->toArray();
+
+    //     $user->friends()->syncWithoutDetaching($friend_ids);
+
+    //     return $this->ok('Friend(s) added.', $friend_names);
+    // }
+
+    // public function remove_friends(Request $request, User $user)
+    // {
+    //     $friend_reference_ids = $request->get('friend_reference_ids', []);
+    //     $friends = User::whereIn('reference_id', $friend_reference_ids)->get();
+
+    //     if(isset($friends) || empty($friends)) {
+    //         return $this->error('Friend(s) not found.', 404);
+    //     }
+
+    //     $friend_names = $friends->pluck('name')->toArray();
+    //     $friend_ids = $friends->pluck('id')->toArray();
+
+    //     $user->friends()->detach($friend_ids);
+
+    //     return $this->ok('Friend(s) removed.', $friend_names);
+    // }
 }
