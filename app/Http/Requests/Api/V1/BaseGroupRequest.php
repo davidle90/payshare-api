@@ -11,6 +11,7 @@ class BaseGroupRequest extends FormRequest
 
         $attributeMap = array_merge([
             'data.attributes.name' => 'name',
+            'data.attributes.isResolved' => 'is_resolved',
             'data.attributes.createdAt' => 'created_at',
             'data.attributes.updatedAt' => 'updated_at',
             'data.relationships.owner.data.id' => 'owner_id',
