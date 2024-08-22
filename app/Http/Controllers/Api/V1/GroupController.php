@@ -119,7 +119,11 @@ class GroupController extends ApiController
 
     public function add_members(Request $request, $reference_id)
     {
-        $group = $this->get_group($reference_id);
+        $group = Group::where('reference_id', $reference_id)->first();
+
+        if(!$group){
+            return $this->error('Group not found', 404);
+        }
 
         if(Gate::authorize('member-group', $group)){
             $member_ids = $request->input('data.attributes.member_ids');
