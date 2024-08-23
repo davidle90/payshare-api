@@ -30,7 +30,8 @@ class AuthController extends Controller
                 'token' => $user->createToken(
                     'API token for ' . $user->email,
                     Abilities::getAbilities($user),
-                    now()->addMonth())->plainTextToken
+                    now()->addMonth())->plainTextToken,
+                'user_reference' => $user->reference_id
             ]
         );
     }
