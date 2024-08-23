@@ -33,5 +33,6 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::post('/groups/{group}/add-members', [GroupMemberController::class, 'add_members']);
     Route::post('/groups/{group}/remove-members', [GroupMemberController::class, 'remove_members']);
-    Route::post('/users/{user}/join-group', [GroupMemberController::class, 'join_group']);
+    Route::post('/users/join-group', [GroupMemberController::class, 'join_group']);
+    Route::post('/users/leave-group', [GroupMemberController::class, 'leave_group']);
 });

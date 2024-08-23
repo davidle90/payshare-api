@@ -36,8 +36,14 @@ class UserController extends ApiController
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show($reference_id)
     {
+        $user = User::where('reference_id', $reference_id)->first();
+
+        if(!$user){
+            return $this->error('User not found.', 404);
+        }
+
         if($this->include('groups')) {
             $user->load('groups');
         }

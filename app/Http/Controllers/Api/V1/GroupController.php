@@ -20,9 +20,15 @@ class GroupController extends ApiController
      */
     public function index(GroupFilter $filters)
     {
-        if(Gate::authorize('show-all-groups')){
+        if(Auth::user()->is_admin){
+            if(Gate::authorize('show-all-groups')){
+                return GroupResource::collection(Group::filter($filters)->paginate());
+            }
+        }
+        if(Gate::authorize('show-own-groups')){
             return GroupResource::collection(Group::filter($filters)->paginate());
         }
+
     }
 
     /**
@@ -115,43 +121,5 @@ class GroupController extends ApiController
 
             return $this->ok('Group successfully deleted.');
         }
-    }
-
-    public function add_members(Request $request, $reference_id)
-    {
-        $group = Group::where('reference_id', $reference_id)->first();
-
-        if(!$group){
-            return $this->error('Group not found', 404);
-        }
-
-        if(Gate::authorize('member-group', $group)){
-            $member_ids = $request->input('data.attributes.member_ids');
-            $group->members()->syncWithoutDetaching($member_ids);
-
-            return $this->ok('Members added', $member_ids);
-        }
-    }
-
-    public function remove_members(Request $request, $reference_id)
-    {
-        $group = Group::where('reference_id', $reference_id)->first();
-
-        if(!$group){
-            return $this->error('Group not found', 404);
-        }
-
-        if(Gate::authorize('member-group', $group)){
-            $member_ids = $request->input('data.attributes.member_ids');
-            $group->members()->detach($member_ids);
-
-            return $this->ok('Members removed', $member_ids);
-        }
-    }
-
-    public function test(Group $group)
-    {
-
-        return helpers::calculate_balance($group);
     }
 }
