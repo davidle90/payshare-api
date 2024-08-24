@@ -18,16 +18,17 @@ class ParticipantResource extends JsonResource
             'type' => 'participant',
             'id' => $this->id,
             'attributes' => [
-                'name' => $this->name,
-                'email' => $this->email,
-                'payment_id' => $this->pivot->payment_id,
-                'member_id' => $this->pivot->member_id,
+                'name' => $this->member->name,
+                'email' => $this->member->email,
+                'payment_id' => $this->payment_id,
+                'member_id' => $this->member_id,
+                'amount' => $this->amount
             ],
             'includes' => [
                 'groups' => GroupResource::collection($this->whenLoaded('groups'))
             ],
             'links' => [
-                'self' => route('users.show', ['user' => $this->pivot->member_id])
+                'self' => route('users.show', ['user' => $this->member_id])
             ]
         ];
     }

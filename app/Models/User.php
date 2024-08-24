@@ -72,9 +72,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Contributor::class, 'member_id', 'id');
     }
 
-    public function participations() : BelongsToMany
+    public function participations() : HasMany
     {
-        return $this->belongsToMany(Payment::class, 'payment_participant', 'member_id', 'payment_id');
+        return $this->hasMany(Participant::class, 'member_id', 'id');
     }
 
     public function friends() : BelongsToMany
