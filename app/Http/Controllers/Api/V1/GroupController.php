@@ -20,15 +20,9 @@ class GroupController extends ApiController
      */
     public function index(GroupFilter $filters)
     {
-        if(Auth::user()->is_admin){
-            if(Gate::authorize('show-all-groups')){
-                return GroupResource::collection(Group::filter($filters)->paginate());
-            }
-        }
-        if(Gate::authorize('show-own-groups')){
+        if(Gate::authorize('show-all-groups')){
             return GroupResource::collection(Group::filter($filters)->paginate());
         }
-
     }
 
     /**

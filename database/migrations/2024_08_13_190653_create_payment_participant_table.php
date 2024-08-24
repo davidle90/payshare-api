@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payment_participant', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('payment_id')->constrained('payments');
-            $table->foreignId('member_id')->constrained('users');
-            $table->timestamps();
-        });
+        // Schema::create('payment_participant', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->foreignId('payment_id')->constrained('payments');
+        //     $table->foreignId('member_id')->constrained('users');
+        //     $table->timestamps();
+        // });
     }
 
     /**
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payment_participant');
+        // Schema::dropIfExists('payment_participant');
     }
 };
