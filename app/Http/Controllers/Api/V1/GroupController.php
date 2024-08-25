@@ -116,4 +116,11 @@ class GroupController extends ApiController
             return $this->ok('Group successfully deleted.');
         }
     }
+
+    public function calculate_balance(Group $group)
+    {
+        $balance = helpers::calculate_balance($group);
+
+        return $balance;
+    }
 }
