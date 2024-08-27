@@ -46,4 +46,9 @@ class Group extends Model
     {
         return $this->hasMany(Payment::class, 'group_id', 'id');
     }
+
+    public function debts() : HasMany
+    {
+        return $this->hasMany(Debt::class, 'group_id', 'id');
+    }
 }

@@ -67,6 +67,10 @@ class GroupController extends ApiController
                 $group->load('payments');
             }
 
+            if($this->include('debts')) {
+                $group->load('debts');
+            }
+
             return new GroupResource($group);
         }
     }
@@ -106,11 +110,12 @@ class GroupController extends ApiController
 
             foreach($group->payments as $payment){
                 $payment->contributors()->delete();
-                $payment->participants()->detach();
+                $payment->participants()->delete();
                 $payment->delete();
             }
 
             $group->members()->detach();
+            $group->debts()->delete();
             $group->delete();
 
             return $this->ok('Group successfully deleted.');

@@ -2,7 +2,10 @@
 
 namespace App\Helpers;
 
+use App\Models\Debt;
 use App\Models\Group;
+use App\Models\Participant;
+use App\Models\User;
 use Illuminate\Support\Str;
 
 class helpers {
@@ -27,33 +30,29 @@ class helpers {
         $balance = [];
 
         foreach ($group->payments as $payment) {
-            // foreach ($payment->contributors as $contributor) {
-            //     $debt = $contributor->amount / $payment->participants->count();
-            //     foreach ($payment->participants as $participant) {
-            //         if ($contributor->member_id != $participant->member_id) {
-            //             $debts[$participant->name][$contributor->member->name] += $debt;
-            //         } else {
-            //             $debts[$participant->name][$contributor->member->name] += 0;
-            //         }
-            //     }
-            // }
+            $participantsWithoutExpenses = $payment->participants()->where('amount', 0)->get();
+            $participantsWithExpenses = $payment->participants()->where('amount', '>', 0)->get();
+
+            $participantsWithoutExpensesCount = $participantsWithoutExpenses->count();
+            if ($participantsWithoutExpensesCount == 0) {
+                continue; // skip this payment since no one to split debt among
+            }
 
             foreach ($payment->contributors as $contributor) {
-                $debt = $contributor->amount / $payment->participants->count();
+                $debtPerMember = ($contributor->amount - $participantsWithExpenses->sum('amount')) / $participantsWithoutExpensesCount;
 
-                foreach ($payment->participants as $participant) {
-                    if (!isset($debts[$participant->name])) {
-                        $debts[$participant->name] = [];
+                foreach ($participantsWithoutExpenses as $participant) {
+                    if (!isset($debts[$participant->member_id][$contributor->member_id])) {
+                        $debts[$participant->member_id][$contributor->member_id] = 0;
                     }
-
-                    if (!isset($debts[$participant->name][$contributor->member->name])) {
-                        $debts[$participant->name][$contributor->member->name] = 0;
-                    }
-
                     if ($contributor->member_id != $participant->member_id) {
-                        $debts[$participant->name][$contributor->member->name] += $debt;
-                    } else {
-                        $debts[$participant->name][$contributor->member->name] += 0;
+                        $debts[$participant->member_id][$contributor->member_id] += $debtPerMember;
+                    }
+                }
+
+                foreach ($participantsWithExpenses as $participant) {
+                    if ($contributor->member_id != $participant->member_id) {
+                        $debts[$participant->member_id][$contributor->member_id] += $participant->amount;
                     }
                 }
             }
@@ -61,17 +60,35 @@ class helpers {
 
         foreach ($debts as $from => $debt) {
             foreach ($debt as $to => $amount) {
-                if($from != $to){
+                if ($from != $to) {
                     if (!isset($balance[$from][$to])) {
                         $balance[$from][$to] = 0;
                     }
-                    $balance[$from][$to] += ($debts[$to][$from] ?? 0) - $amount;
+                    if (!isset($balance[$to][$from])) {
+                        $balance[$to][$from] = 0;
+                    }
+                    $balance[$from][$to] += $amount;
+                    $balance[$to][$from] -= $amount;
                 }
             }
         }
 
-        foreach ($group->members as $member) {
-            $debts[$member->name][$member->name] = 0;
+        foreach ($balance as $from => $debtsToOthers) {
+            foreach ($debtsToOthers as $to => $amount) {
+                if ($from !== $to) {
+                    Debt::updateOrCreate(
+                        [
+                            'group_id' => $group->id,
+                            'from_user_id' => $from,
+                            'to_user_id' => $to
+                        ],
+                        [
+                            'amount' => (float) $amount
+                        ],
+
+                    );
+                }
+            }
         }
 
         return $balance;

@@ -29,6 +29,7 @@ class GroupResource extends JsonResource
             'includes' => [
                 'payments' => PaymentResource::collection($this->whenLoaded('payments')),
                 'members' => UserResource::collection($this->members),
+                'debts' => DebtResource::collection($this->whenLoaded('debts'))
             ],
             'links' => [
                 'self' => route('groups.show', ['group' => $this->reference_id])

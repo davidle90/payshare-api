@@ -40,20 +40,10 @@ class PaymentController extends ApiController
             $attributes = $request->mappedAttributes();
             $attributes['group_id'] = $group->id;
             $attributes['created_by'] = Auth::user()->id;
-            //$participant_ids = [];
 
             $payment = Payment::create($attributes);
             $payment->reference_id = helpers::generate_reference_id(3, $payment->label, $payment->id);
             $payment->save();
-
-            // $group_member_ids = $group->members()->pluck('member_id')->toarray();
-
-            // foreach($attributes['participants'] as $participant){
-            //     if(!in_array($participant['id'], $group_member_ids)){
-            //         return $this->error('User not member of this group: '.$participant['id'], 400);
-            //     }
-            //     $participant_ids[] = $participant['id'];
-            // }
 
             foreach($attributes['participants'] as $participant) {
                 $new_participant = Participant::firstOrNew(['member_id' => $participant['id'], 'payment_id' => $payment->id]);
@@ -76,8 +66,7 @@ class PaymentController extends ApiController
             $payment->reference_id = helpers::generate_reference_id(5, $payment->label, $payment->id);
             $payment->save();
 
-            //$payment->participants()->sync($participant_ids);
-
+            helpers::calculate_balance($group);
             helpers::update_total_expenses($group);
 
             return new PaymentResource($payment);
@@ -184,6 +173,7 @@ class PaymentController extends ApiController
             $payment->total = $total;
             $payment->save();
 
+            helpers::calculate_balance($group);
             helpers::update_total_expenses($group);
 
             return new PaymentResource($payment);
@@ -208,6 +198,8 @@ class PaymentController extends ApiController
             $payment->contributors()->delete();
             $payment->participants()->delete();
             $payment->delete();
+
+            helpers::calculate_balance($group);
 
             return $this->ok('Payment successfully deleted.');
         }
