@@ -33,6 +33,8 @@ class UserResource extends JsonResource
                 'sentFriendRequests' => FriendRequestResource::collection($this->whenLoaded('sentFriendRequests')),
                 'contributions' => ContributorResource::collection($this->whenLoaded('contributions')),
                 'participations' => ParticipantResource::collection($this->whenLoaded('participations')),
+                'debtsIOwe' => DebtResource::collection($this->whenLoaded('debtsIOwe')),
+                'debtsOwedToMe' => DebtResource::collection($this->whenLoaded('debtsOwedToMe')),
             ],
             'links' => [
                 'self' => route('users.show', ['user' => $this->id])

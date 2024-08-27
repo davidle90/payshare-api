@@ -2,8 +2,10 @@
 
 namespace App\Helpers;
 
+use App\Models\Debt;
 use App\Models\Group;
 use App\Models\Participant;
+use App\Models\User;
 use Illuminate\Support\Str;
 
 class helpers {
@@ -40,17 +42,17 @@ class helpers {
                 $debtPerMember = ($contributor->amount - $participantsWithExpenses->sum('amount')) / $participantsWithoutExpensesCount;
 
                 foreach ($participantsWithoutExpenses as $participant) {
-                    if (!isset($debts[$participant->member->name][$contributor->member->name])) {
-                        $debts[$participant->member->name][$contributor->member->name] = 0;
+                    if (!isset($debts[$participant->member_id][$contributor->member_id])) {
+                        $debts[$participant->member_id][$contributor->member_id] = 0;
                     }
-                    if ($contributor->member_id != $participant->member->id) {
-                        $debts[$participant->member->name][$contributor->member->name] += $debtPerMember;
+                    if ($contributor->member_id != $participant->member_id) {
+                        $debts[$participant->member_id][$contributor->member_id] += $debtPerMember;
                     }
                 }
 
                 foreach ($participantsWithExpenses as $participant) {
                     if ($contributor->member_id != $participant->member_id) {
-                        $debts[$participant->member->name][$contributor->member->name] += $participant->amount;
+                        $debts[$participant->member_id][$contributor->member_id] += $participant->amount;
                     }
                 }
             }
@@ -65,8 +67,26 @@ class helpers {
                     if (!isset($balance[$to][$from])) {
                         $balance[$to][$from] = 0;
                     }
-                    $balance[$from][$to] -= $amount;
-                    $balance[$to][$from] += $amount;
+                    $balance[$from][$to] += $amount;
+                    $balance[$to][$from] -= $amount;
+                }
+            }
+        }
+
+        foreach ($balance as $from => $debtsToOthers) {
+            foreach ($debtsToOthers as $to => $amount) {
+                if ($from !== $to) {
+                    Debt::updateOrCreate(
+                        [
+                            'group_id' => $group->id,
+                            'from_user_id' => $from,
+                            'to_user_id' => $to
+                        ],
+                        [
+                            'amount' => (float) $amount
+                        ],
+
+                    );
                 }
             }
         }

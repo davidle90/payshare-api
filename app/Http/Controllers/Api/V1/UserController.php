@@ -62,6 +62,12 @@ class UserController extends ApiController
         if($this->include('sentFriendRequests')) {
             $user->load('sentFriendRequests');
         }
+        if($this->include('debtsIOwe')) {
+            $user->load('debtsIOwe');
+        }
+        if($this->include('debtsOwedToMe')) {
+            $user->load('debtsOwedToMe');
+        }
 
         return new UserResource($user);
     }
