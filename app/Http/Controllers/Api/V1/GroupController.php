@@ -57,7 +57,7 @@ class GroupController extends ApiController
             return $this->error('Group not found', 404);
         }
 
-        if(Gate::authorize('show-group', $group)) {
+        if(Gate::authorize('member-group', $group)) {
 
             if($this->include('members')) {
                 $group->load('members');
@@ -86,9 +86,10 @@ class GroupController extends ApiController
             return $this->error('Group not found', 404);
         }
 
-        if(Gate::authorize('update-group', $group)) {
+        if(Gate::authorize('member-group', $group)) {
 
             $group->update($request->mappedAttributes());
+            helpers::calculate_balance($group);
 
             return new GroupResource($group);
         }
@@ -106,7 +107,7 @@ class GroupController extends ApiController
             return $this->error('Group not found', 404);
         }
 
-        if(Gate::authorize('delete-group', $group)) {
+        if(Gate::authorize('member-group', $group)) {
 
             foreach($group->payments as $payment){
                 $payment->contributors()->delete();
