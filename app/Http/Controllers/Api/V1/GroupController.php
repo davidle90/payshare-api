@@ -90,6 +90,7 @@ class GroupController extends ApiController
 
             $group->update($request->mappedAttributes());
             helpers::calculate_balance($group);
+            helpers::update_total_expenses($group);
 
             return new GroupResource($group);
         }

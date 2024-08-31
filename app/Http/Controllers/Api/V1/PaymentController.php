@@ -200,6 +200,7 @@ class PaymentController extends ApiController
             $payment->delete();
 
             helpers::calculate_balance($group);
+            helpers::update_total_expenses($group);
 
             return $this->ok('Payment successfully deleted.');
         }
