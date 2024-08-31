@@ -126,13 +126,25 @@ class User extends Authenticatable implements MustVerifyEmail
         $friend->friends()->detach($this->id);
     }
 
-    public function debtsOwedToMe(): HasMany
+    public function debtsOwedToMe()
     {
-        return $this->hasMany(Debt::class, 'to_user_id');
+        $debtsOwedToMe = $this->hasMany(Debt::class, 'to_user_id');
+
+        $debts = $debtsOwedToMe->whereHas('group', function ($q) {
+            $q->where('is_resolved', false);
+        });
+
+        return $debts;
     }
 
-    public function debtsIOwe(): HasMany
+    public function debtsIOwe()
     {
-        return $this->hasMany(Debt::class, 'from_user_id');
+        $debtsIOwe = $this->hasMany(Debt::class, 'from_user_id');
+
+        $debts = $debtsIOwe->whereHas('group', function ($q) {
+            $q->where('is_resolved', false);
+        });
+
+        return $debts;
     }
 }

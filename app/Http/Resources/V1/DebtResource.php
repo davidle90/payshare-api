@@ -21,7 +21,8 @@ class DebtResource extends JsonResource
                 'from' => $this->from_user->name,
                 'to' => $this->to_user->name,
                 'amount' => $this->amount,
-                'group' => $this->group->reference_id,
+                'group' => $this->group->name,
+                'group_id' => $this->group->reference_id,
             ],
             'includes' => [
             ],
