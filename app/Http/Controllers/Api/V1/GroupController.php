@@ -101,7 +101,6 @@ class GroupController extends ApiController
      */
     public function destroy($reference_id)
     {
-
         $group = Group::where('reference_id', $reference_id)->first();
 
         if(!$group){

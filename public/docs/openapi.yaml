@@ -1,0 +1,742 @@
+openapi: 3.0.3
+info:
+  title: 'PayShare API'
+  description: ''
+  version: 1.0.0
+servers:
+  -
+    url: 'http://127.0.0.1:8000'
+paths:
+  /api/login:
+    post:
+      summary: ''
+      operationId: postApiLogin
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: 'Must be a valid email address.'
+                  example: gkreiger@example.org
+                password:
+                  type: string
+                  description: 'Must be at least 8 characters.'
+                  example: 'f&d=B&cy$'
+              required:
+                - email
+                - password
+      security: []
+  /api/register:
+    post:
+      summary: ''
+      operationId: postApiRegister
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+  /api/logout:
+    post:
+      summary: ''
+      operationId: postApiLogout
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+  /api/v1/users:
+    get:
+      summary: 'Display a listing of the resource.'
+      operationId: displayAListingOfTheResource
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    post:
+      summary: 'Store a newly created resource in storage.'
+      operationId: storeANewlyCreatedResourceInStorage
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  description: ''
+                  example: []
+                  properties:
+                    attributes:
+                      type: object
+                      description: ''
+                      example: []
+                      properties:
+                        name:
+                          type: string
+                          description: ''
+                          example: ratione
+                        email:
+                          type: string
+                          description: 'Must be a valid email address.'
+                          example: regan.rolfson@example.net
+                        isAdmin:
+                          type: boolean
+                          description: ''
+                          example: true
+                        password:
+                          type: string
+                          description: ''
+                          example: 'B-shE#]m1Y'
+      security: []
+  '/api/v1/users/{id}':
+    get:
+      summary: 'Display the specified resource.'
+      operationId: displayTheSpecifiedResource
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    delete:
+      summary: 'Remove the specified resource from storage.'
+      operationId: removeTheSpecifiedResourceFromStorage
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the user.'
+        example: non
+        required: true
+        schema:
+          type: string
+  '/api/v1/users/{user_id}':
+    patch:
+      summary: 'Update the specified resource in storage.'
+      operationId: updateTheSpecifiedResourceInStorage
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  description: ''
+                  example: []
+                  properties:
+                    attributes:
+                      type: object
+                      description: ''
+                      example: []
+                      properties:
+                        name:
+                          type: string
+                          description: ''
+                          example: corrupti
+                        password:
+                          type: string
+                          description: ''
+                          example: 83X)>ysVlJ2NcEbF
+                        reference_id:
+                          type: string
+                          description: ''
+                          example: null
+      security: []
+    parameters:
+      -
+        in: path
+        name: user_id
+        description: 'The ID of the user.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/v1/friend-request/send:
+    post:
+      summary: ''
+      operationId: postApiV1FriendRequestSend
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+  '/api/v1/friend-request/accept/{friendRequest_id}':
+    post:
+      summary: ''
+      operationId: postApiV1FriendRequestAcceptFriendRequest_id
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: friendRequest_id
+        description: 'The ID of the friendRequest.'
+        example: 4
+        required: true
+        schema:
+          type: integer
+  '/api/v1/friend-request/decline/{friendRequest_id}':
+    post:
+      summary: ''
+      operationId: postApiV1FriendRequestDeclineFriendRequest_id
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: friendRequest_id
+        description: 'The ID of the friendRequest.'
+        example: 5
+        required: true
+        schema:
+          type: integer
+  '/api/v1/friend-request/remove/{friend_id}':
+    post:
+      summary: ''
+      operationId: postApiV1FriendRequestRemoveFriend_id
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: friend_id
+        description: 'The ID of the friend.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/v1/groups:
+    get:
+      summary: 'Display a listing of the resource.'
+      operationId: displayAListingOfTheResource
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    post:
+      summary: 'Store a newly created resource in storage.'
+      operationId: storeANewlyCreatedResourceInStorage
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  description: ''
+                  example: []
+                  properties:
+                    attributes:
+                      type: object
+                      description: ''
+                      example: []
+                      properties:
+                        name:
+                          type: string
+                          description: ''
+                          example: omnis
+              required:
+                - data
+      security: []
+  '/api/v1/groups/{id}':
+    get:
+      summary: 'Display the specified resource.'
+      operationId: displayTheSpecifiedResource
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    delete:
+      summary: 'Remove the specified resource from storage.'
+      operationId: removeTheSpecifiedResourceFromStorage
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the group.'
+        example: vel
+        required: true
+        schema:
+          type: string
+  '/api/v1/groups/{group}':
+    patch:
+      summary: 'Update the specified resource in storage.'
+      operationId: updateTheSpecifiedResourceInStorage
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  description: ''
+                  example: []
+                  properties:
+                    attributes:
+                      type: object
+                      description: ''
+                      example: []
+                      properties:
+                        name:
+                          type: string
+                          description: ''
+                          example: suscipit
+                        isResolved:
+                          type: boolean
+                          description: ''
+                          example: true
+                        reference_id:
+                          type: string
+                          description: ''
+                          example: null
+                    relationships:
+                      type: object
+                      description: ''
+                      example: []
+                      properties:
+                        owner:
+                          type: object
+                          description: ''
+                          example: []
+                          properties:
+                            data:
+                              type: object
+                              description: ''
+                              example: []
+                              properties:
+                                id:
+                                  type: string
+                                  description: ''
+                                  example: null
+      security: []
+    parameters:
+      -
+        in: path
+        name: group
+        description: 'The group.'
+        example: illo
+        required: true
+        schema:
+          type: string
+  '/api/v1/groups/{group_id}/payments':
+    get:
+      summary: 'Display a listing of the resource.'
+      operationId: displayAListingOfTheResource
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    post:
+      summary: 'Store a newly created resource in storage.'
+      operationId: storeANewlyCreatedResourceInStorage
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  description: ''
+                  example: []
+                  properties:
+                    attributes:
+                      type: object
+                      description: ''
+                      example: []
+                      properties:
+                        label:
+                          type: string
+                          description: ''
+                          example: repudiandae
+                    relationships:
+                      type: object
+                      description: ''
+                      example: []
+                      properties:
+                        contributors:
+                          type: array
+                          description: ''
+                          example: null
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                description: ''
+                                example: 18
+                              amount:
+                                type: number
+                                description: ''
+                                example: 33615749.0
+                            required:
+                              - id
+                              - amount
+                        participants:
+                          type: array
+                          description: ''
+                          example: null
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                description: ''
+                                example: 2
+                              amount:
+                                type: number
+                                description: ''
+                                example: 1595049.0
+                            required:
+                              - id
+              required:
+                - data
+      security: []
+    parameters:
+      -
+        in: path
+        name: group_id
+        description: 'The ID of the group.'
+        example: at
+        required: true
+        schema:
+          type: string
+  '/api/v1/groups/{group_id}/payments/{id}':
+    get:
+      summary: 'Display the specified resource.'
+      operationId: displayTheSpecifiedResource
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - Endpoints
+      security: []
+    delete:
+      summary: 'Remove the specified resource from storage.'
+      operationId: removeTheSpecifiedResourceFromStorage
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: group_id
+        description: 'The ID of the group.'
+        example: iste
+        required: true
+        schema:
+          type: string
+      -
+        in: path
+        name: id
+        description: 'The ID of the payment.'
+        example: neque
+        required: true
+        schema:
+          type: string
+  '/api/v1/groups/{group}/payments/{payment}':
+    patch:
+      summary: 'Update the specified resource in storage.'
+      operationId: updateTheSpecifiedResourceInStorage
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  description: ''
+                  example: []
+                  properties:
+                    attributes:
+                      type: object
+                      description: ''
+                      example: []
+                      properties:
+                        label:
+                          type: string
+                          description: ''
+                          example: aut
+                        reference_id:
+                          type: string
+                          description: ''
+                          example: null
+                    relationships:
+                      type: object
+                      description: ''
+                      example: []
+                      properties:
+                        contributors:
+                          type: array
+                          description: ''
+                          example: null
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                description: ''
+                                example: 1
+                              amount:
+                                type: number
+                                description: ''
+                                example: 0.80143
+                            required:
+                              - id
+                              - amount
+                        participants:
+                          type: array
+                          description: ''
+                          example: null
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                description: ''
+                                example: 15
+                              amount:
+                                type: number
+                                description: ''
+                                example: 6089.9728337
+                            required:
+                              - id
+      security: []
+    parameters:
+      -
+        in: path
+        name: group
+        description: 'The group.'
+        example: animi
+        required: true
+        schema:
+          type: string
+      -
+        in: path
+        name: payment
+        description: 'The payment.'
+        example: impedit
+        required: true
+        schema:
+          type: string
+  '/api/v1/groups/{group}/add-members':
+    post:
+      summary: ''
+      operationId: postApiV1GroupsGroupAddMembers
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: group
+        description: 'The group.'
+        example: similique
+        required: true
+        schema:
+          type: string
+  '/api/v1/groups/{group}/remove-members':
+    post:
+      summary: ''
+      operationId: postApiV1GroupsGroupRemoveMembers
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: group
+        description: 'The group.'
+        example: et
+        required: true
+        schema:
+          type: string
+  /api/v1/users/join-group:
+    post:
+      summary: ''
+      operationId: postApiV1UsersJoinGroup
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+  /api/v1/users/leave-group:
+    post:
+      summary: ''
+      operationId: postApiV1UsersLeaveGroup
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - Endpoints
+      security: []
+tags:
+  -
+    name: Endpoints
+    description: ''
