@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\helpers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\LoginUserRequest;
 use App\Models\User;
@@ -9,6 +10,7 @@ use App\Permissions\V1\Abilities;
 use App\Traits\ApiResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -36,10 +38,31 @@ class AuthController extends Controller
         );
     }
 
-    public function register()
+    public function register(Request $request)
     {
-        return $this->ok('hello world', null);
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:6|confirmed'
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'email_verified_at' => now(),
+            'password' => bcrypt($request->password),
+            'remember_token' => Str::random(10),
+            'is_admin' => false
+        ]);
+
+        $user->reference_id = helpers::generate_reference_id(6, $user->name, $user->id);
+        $user->save();
+
+        return $this->ok('User registered successfully', [
+            'user' => $user,
+        ]);
     }
+
 
     public function logout(Request $request)
     {
